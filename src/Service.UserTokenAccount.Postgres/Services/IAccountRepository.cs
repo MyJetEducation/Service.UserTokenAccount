@@ -2,7 +2,7 @@
 {
 	public interface IAccountRepository
 	{
-		ValueTask<decimal> GetValueAsync(Guid? userId);
-		ValueTask<decimal?> UpdateValueAsync(Guid? userId);
+		ValueTask<decimal> GetValueAsync(string userId);
+		ValueTask<decimal?> UpdateValueAsync(string userId);
 	}
 }

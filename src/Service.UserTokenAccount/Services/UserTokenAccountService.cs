@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -44,7 +43,7 @@ namespace Service.UserTokenAccount.Services
 		{
 			await OperationLocker.WaitAsync();
 
-			Guid? userId = request.UserId;
+			string userId = request.UserId;
 
 			try
 			{
@@ -89,7 +88,7 @@ namespace Service.UserTokenAccount.Services
 			return accountValue >= request.Value;
 		}
 
-		private ValueTask<decimal> GetAccountValue(Guid? userId) => _accountRepository.GetValueAsync(userId);
+		private ValueTask<decimal> GetAccountValue(string userId) => _accountRepository.GetValueAsync(userId);
 
 		public async ValueTask<AccountGrpcResponse> GetAccountAsync(GetAccountGrpcRequest request) => new AccountGrpcResponse
 		{

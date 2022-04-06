@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using Service.MarketProduct.Domain.Models;
 using Service.UserTokenAccount.Domain.Models;
 
@@ -9,7 +8,7 @@ namespace Service.UserTokenAccount.Grpc.Models
 	public class NewOperationGrpcRequest
 	{
 		[DataMember(Order = 1)]
-		public Guid? UserId { get; set; }
+		public string UserId { get; set; }
 
 		[DataMember(Order = 2)]
 		public TokenOperationMovement Movement { get; set; }

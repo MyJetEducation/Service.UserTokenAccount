@@ -25,11 +25,8 @@ namespace Service.UserTokenAccount.Postgres.Migrations
 
             modelBuilder.Entity("Service.UserTokenAccount.Postgres.Models.UserTokenAccountEntity", b =>
                 {
-                    b.Property<Guid?>("UserId")
-                        .IsRequired()
-                        .HasColumnType("uuid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
@@ -67,9 +64,9 @@ namespace Service.UserTokenAccount.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("uuid");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Value")
                         .HasColumnType("numeric");
