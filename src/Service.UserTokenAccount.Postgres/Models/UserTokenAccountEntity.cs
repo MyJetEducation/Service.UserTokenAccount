@@ -2,9 +2,9 @@
 {
     public class UserTokenAccountEntity
     {
-	    public UserTokenAccountEntity(Guid? userId) => UserId = userId;
+	    public UserTokenAccountEntity(string userId) => UserId = userId;
 
-        public Guid? UserId { get; set; }
+        public string UserId { get; set; }
 
         public DateTime? Date { get; set; }
 

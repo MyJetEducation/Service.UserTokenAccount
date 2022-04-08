@@ -18,7 +18,7 @@ namespace Service.UserTokenAccount.Postgres.Services
 			_logger = logger;
 		}
 
-		public async ValueTask<UserTokenOperationEntity[]> GetEntitiesAsync(Guid? userId, TokenOperationMovement? movement, TokenOperationSource? source, MarketProductType? productType)
+		public async ValueTask<UserTokenOperationEntity[]> GetEntitiesAsync(string userId, TokenOperationMovement? movement, TokenOperationSource? source, MarketProductType? productType)
 		{
 			try
 			{
@@ -60,7 +60,7 @@ namespace Service.UserTokenAccount.Postgres.Services
 			}
 		}
 
-		public async ValueTask<decimal?> CountTotalAsync(Guid? userId)
+		public async ValueTask<decimal?> CountTotalAsync(string userId)
 		{
 			try
 			{

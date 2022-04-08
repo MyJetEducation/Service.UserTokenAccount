@@ -20,14 +20,14 @@ namespace Service.UserTokenAccount.Postgres.Services
 			_systemClock = systemClock;
 		}
 
-		public async ValueTask<decimal> GetValueAsync(Guid? userId)
+		public async ValueTask<decimal> GetValueAsync(string userId)
 		{
 			UserTokenAccountEntity entity = await GetEntity(userId);
 
 			return (entity?.Value).GetValueOrDefault();
 		}
 
-		private async ValueTask<UserTokenAccountEntity> GetEntity(Guid? userId)
+		private async ValueTask<UserTokenAccountEntity> GetEntity(string userId)
 		{
 			UserTokenAccountEntity accountEntity = null;
 
@@ -45,7 +45,7 @@ namespace Service.UserTokenAccount.Postgres.Services
 			return accountEntity;
 		}
 
-		public async ValueTask<decimal?> UpdateValueAsync(Guid? userId)
+		public async ValueTask<decimal?> UpdateValueAsync(string userId)
 		{
 			decimal? value = await _operationRepository.CountTotalAsync(userId);
 			if (value == null)

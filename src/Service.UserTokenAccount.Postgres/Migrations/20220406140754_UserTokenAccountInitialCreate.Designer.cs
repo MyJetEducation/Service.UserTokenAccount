@@ -12,8 +12,8 @@ using Service.UserTokenAccount.Postgres;
 namespace Service.UserTokenAccount.Postgres.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220324072755_InitialCreateUserTokenAccount")]
-    partial class InitialCreateUserTokenAccount
+    [Migration("20220406140754_UserTokenAccountInitialCreate")]
+    partial class UserTokenAccountInitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,11 +27,8 @@ namespace Service.UserTokenAccount.Postgres.Migrations
 
             modelBuilder.Entity("Service.UserTokenAccount.Postgres.Models.UserTokenAccountEntity", b =>
                 {
-                    b.Property<Guid?>("UserId")
-                        .IsRequired()
-                        .HasColumnType("uuid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
@@ -69,9 +66,9 @@ namespace Service.UserTokenAccount.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("uuid");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Value")
                         .HasColumnType("numeric");

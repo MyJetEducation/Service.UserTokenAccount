@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Service.UserTokenAccount.Grpc.Models
 {
@@ -7,6 +6,6 @@ namespace Service.UserTokenAccount.Grpc.Models
 	public class GetAccountGrpcRequest
 	{
 		[DataMember(Order = 1)]
-		public Guid? UserId { get; set; }
+		public string UserId { get; set; }
 	}
 }

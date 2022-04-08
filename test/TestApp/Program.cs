@@ -26,7 +26,7 @@ namespace TestApp
 			IGrpcServiceProxy<IUserTokenAccountService> serviceProxy = factory.GetUserTokenAccountService();
 			IUserTokenAccountService client = serviceProxy.Service;
 
-			var userId = Guid.NewGuid();
+			var userId = Guid.NewGuid().ToString();
 
 			//Check zero value at start
 			AccountGrpcResponse getAccount1Response = await client.GetAccountAsync(new GetAccountGrpcRequest {UserId = userId});
