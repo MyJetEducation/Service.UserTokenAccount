@@ -28,7 +28,6 @@ namespace Service.UserTokenAccount.Modules
 
 			builder.RegisterType<ServerKeyValueDtoRepository<TutorialProgressPrcDto[]>>().As<IServerKeyValueDtoRepository<TutorialProgressPrcDto[]>>().SingleInstance();
 			builder.RegisterType<ServerKeyValueDtoRepository<UserFirstLoginDto>>().As<IServerKeyValueDtoRepository<UserFirstLoginDto>>().SingleInstance();
-			builder.RegisterType<ServerKeyValueDtoRepository<UserLastDailyTokenIncreaseDto>>().As<IServerKeyValueDtoRepository<UserLastDailyTokenIncreaseDto>>().SingleInstance();
 
 			builder.RegisterType<SetProgressInfoNotificator>().AutoActivate().SingleInstance();
 			builder.RegisterType<ClientLoginInfoNotificator>().AutoActivate().SingleInstance();
