@@ -56,7 +56,7 @@ namespace Service.UserTokenAccount.Services
 
 				bool newEntityResult = await _operationRepository.NewEntityAsync(request.ToModel(_systemClock.Now));
 				if (!newEntityResult)
-					NewOperationGrpcResponse.Error(TokenOperationResult.Failed);
+					return NewOperationGrpcResponse.Error(TokenOperationResult.Failed);
 
 				decimal? newAccountValue = await _accountRepository.UpdateValueAsync(userId);
 				if (newAccountValue == null || newAccountValue < 0)
