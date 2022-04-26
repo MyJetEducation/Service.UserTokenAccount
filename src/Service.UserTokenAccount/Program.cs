@@ -33,7 +33,6 @@ namespace Service.UserTokenAccount
             CreateHostBuilder(loggerFactory, args);
         }
 
-
         public static void CreateHostBuilder(ILoggerFactory loggerFactory, string[] args)
         {
             ILogger<Program> logger = loggerFactory.CreateLogger<Program>();

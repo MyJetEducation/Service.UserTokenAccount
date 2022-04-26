@@ -7,6 +7,7 @@ using Service.ClientAuditLog.Domain.Models;
 using Service.Core.Client.Services;
 using Service.ServerKeyValue.Client;
 using Service.ServiceBus.Models;
+using Service.UserTokenAccount.Domain.Models;
 using Service.UserTokenAccount.Jobs;
 using Service.UserTokenAccount.Postgres.Services;
 using Service.UserTokenAccount.Services;
@@ -24,7 +25,10 @@ namespace Service.UserTokenAccount.Modules
 			builder.RegisterType<SystemClock>().AsImplementedInterfaces().SingleInstance();
 			builder.RegisterType<OperationRepository>().AsImplementedInterfaces().SingleInstance();
 			builder.RegisterType<AccountRepository>().AsImplementedInterfaces().SingleInstance();
-			builder.RegisterType<TutorialProgressPrcRepository>().AsImplementedInterfaces().SingleInstance();
+
+			builder.RegisterType<ServerKeyValueDtoRepository<TutorialProgressPrcDto[]>>().As<IServerKeyValueDtoRepository<TutorialProgressPrcDto[]>>().SingleInstance();
+			builder.RegisterType<ServerKeyValueDtoRepository<UserFirstLoginDto>>().As<IServerKeyValueDtoRepository<UserFirstLoginDto>>().SingleInstance();
+			builder.RegisterType<ServerKeyValueDtoRepository<UserLastDailyTokenIncreaseDto>>().As<IServerKeyValueDtoRepository<UserLastDailyTokenIncreaseDto>>().SingleInstance();
 
 			builder.RegisterType<SetProgressInfoNotificator>().AutoActivate().SingleInstance();
 			builder.RegisterType<ClientLoginInfoNotificator>().AutoActivate().SingleInstance();

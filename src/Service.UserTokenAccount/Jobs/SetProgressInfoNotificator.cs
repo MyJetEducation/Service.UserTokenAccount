@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,23 +19,25 @@ namespace Service.UserTokenAccount.Jobs
 	/// </summary>
 	public class SetProgressInfoNotificator : NotificatorBase<SetProgressInfoNotificator>
 	{
-		private readonly ITutorialProgressPrcRepository _tutorialProgressPrcRepository;
+		private readonly Func<string> _tutorialProgressPrcKey = Program.ReloadedSettings(model => model.KeyTutorialProgressPrc);
+
+		private readonly IServerKeyValueDtoRepository<TutorialProgressPrcDto[]> _serverKeyValueDtoRepository;
 
 		public SetProgressInfoNotificator(ILogger<SetProgressInfoNotificator> logger,
 			ISubscriber<IReadOnlyList<SetProgressInfoServiceBusModel>> subscriber,
 			IAccountRepository accountRepository,
 			IOperationRepository operationRepository,
-			ISystemClock systemClock,
-			ITutorialProgressPrcRepository tutorialProgressPrcRepository) :
+			ISystemClock systemClock, IServerKeyValueDtoRepository<TutorialProgressPrcDto[]> serverKeyValueDtoRepository) :
 				base(accountRepository, operationRepository, logger, systemClock)
 		{
-			_tutorialProgressPrcRepository = tutorialProgressPrcRepository;
+			_serverKeyValueDtoRepository = serverKeyValueDtoRepository;
 			subscriber.Subscribe(HandleEvent);
 		}
 
 		private async ValueTask HandleEvent(IReadOnlyList<SetProgressInfoServiceBusModel> events)
 		{
 			TokenIncreaseValues settings = GetSettings().Invoke();
+			string settingsKey = _tutorialProgressPrcKey.Invoke();
 
 			foreach (SetProgressInfoServiceBusModel message in events)
 			{
@@ -45,7 +48,7 @@ namespace Service.UserTokenAccount.Jobs
 
 				string userId = message.UserId;
 
-				List<TutorialProgressPrcDto> dtos = (await _tutorialProgressPrcRepository.Get(userId)).ToList();
+				List<TutorialProgressPrcDto> dtos = (await _serverKeyValueDtoRepository.Get(settingsKey, userId) ?? Array.Empty<TutorialProgressPrcDto>()).ToList();
 				TutorialProgressPrcDto prcInfo = dtos.FirstOrDefault(dto => dto.Tutorial == message.Tutorial);
 				if (prcInfo == null)
 				{
@@ -73,7 +76,7 @@ namespace Service.UserTokenAccount.Jobs
 				if (value == 0)
 					continue;
 
-				bool flagsSettet = await _tutorialProgressPrcRepository.Save(userId, dtos.ToArray());
+				bool flagsSettet = await _serverKeyValueDtoRepository.Save(settingsKey, userId, dtos.ToArray());
 				if (!flagsSettet)
 					Logger.LogError("Can't save TutorialProgressPrcDto ({dto}) for request: {request}", prcInfo, message);
 
