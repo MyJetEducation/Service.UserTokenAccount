@@ -1,4 +1,5 @@
-﻿using MyJetWallet.Sdk.Service;
+﻿using System;
+using MyJetWallet.Sdk.Service;
 using MyYamlParser;
 
 namespace Service.UserTokenAccount.Settings
@@ -26,8 +27,8 @@ namespace Service.UserTokenAccount.Settings
 		[YamlProperty("UserTokenAccount.KeyTutorialProgressPrc")]
 		public string KeyTutorialProgressPrc { get; set; }
 
-		[YamlProperty("UserTokenAccount.KeyFirstLogin")]
-		public string KeyFirstLogin { get; set; }
+		[YamlProperty("UserTokenAccount.KeyUserLoginInfo")]
+		public string KeyUserLoginInfo { get; set; }
 
 		[YamlProperty("UserTokenAccount.TokenIncreaseValues")]
 		public TokenIncreaseValues TokenIncreaseValues { get; set; }

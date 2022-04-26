@@ -12,19 +12,19 @@ using Service.UserTokenAccount.Services;
 namespace Service.UserTokenAccount.Jobs
 {
 	/// <summary>
-	///     Первый логин (регистрация)
+	///     Первый логин (регистрация), ежедневное начисление при логине
 	/// </summary>
 	public class ClientLoginInfoNotificator : NotificatorBase<ClientLoginInfoNotificator>
 	{
-		private readonly Func<string> _firstLoginKey = Program.ReloadedSettings(model => model.KeyFirstLogin);
+		private readonly string _settingsKey = Program.Settings.KeyUserLoginInfo;
 
-		private readonly IServerKeyValueDtoRepository<UserFirstLoginDto> _serverKeyValueDtoRepository;
+		private readonly IServerKeyValueDtoRepository<UserLoginInfoDto> _serverKeyValueDtoRepository;
 
 		public ClientLoginInfoNotificator(ILogger<ClientLoginInfoNotificator> logger,
 			ISubscriber<IReadOnlyList<ClientAuditLogModel>> subscriber,
 			IAccountRepository accountRepository,
 			IOperationRepository operationRepository,
-			ISystemClock systemClock, IServerKeyValueDtoRepository<UserFirstLoginDto> serverKeyValueDtoRepository) :
+			ISystemClock systemClock, IServerKeyValueDtoRepository<UserLoginInfoDto> serverKeyValueDtoRepository) :
 				base(accountRepository, operationRepository, logger, systemClock)
 		{
 			_serverKeyValueDtoRepository = serverKeyValueDtoRepository;
@@ -33,22 +33,32 @@ namespace Service.UserTokenAccount.Jobs
 
 		private async ValueTask HandleEvent(IReadOnlyList<ClientAuditLogModel> events)
 		{
-			int value = GetSettings().Invoke().Register;
+			DateTime nowDate = SystemClock.Now;
 
 			foreach (ClientAuditLogModel message in events)
 			{
 				string userId = message.ClientId;
-				string firstLoginKey = _firstLoginKey.Invoke();
 
-				UserFirstLoginDto firstLoginDto = await _serverKeyValueDtoRepository.Get(firstLoginKey, userId);
-				if (firstLoginDto?.WasLogin == true)
-					continue;
+				UserLoginInfoDto dto = await _serverKeyValueDtoRepository.Get(_settingsKey, userId);
+
+				int value;
+				if (dto == null)
+				{
+					dto = new UserLoginInfoDto {LastLoginDate = nowDate};
+					value = GetSettings().Invoke().Register;
+				}
+				else if (dto.LastLoginDate.Date != nowDate.Date)
+				{
+					dto.LastLoginDate = nowDate;
+					value = GetSettings().Invoke().Daily;
+				}
+				else continue;
+
+				bool dtoSaved = await _serverKeyValueDtoRepository.Save(_settingsKey, userId, dto);
+				if (!dtoSaved)
+					Logger.LogError("Can't save UserLoginInfoDto ({@dto}) for request: {request}", dto, message);
 
 				await ProcessMessage(userId, value, message);
-
-				bool response = await _serverKeyValueDtoRepository.Save(firstLoginKey, userId, new UserFirstLoginDto {WasLogin = true});
-				if (!response)
-					Logger.LogError("Can't save user first login flag for request: {@request}", message);
 			}
 		}
 	}

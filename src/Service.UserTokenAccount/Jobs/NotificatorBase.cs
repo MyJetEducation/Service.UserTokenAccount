@@ -14,7 +14,7 @@ namespace Service.UserTokenAccount.Jobs
 	{
 		private readonly IAccountRepository _accountRepository;
 		private readonly IOperationRepository _operationRepository;
-		private readonly ISystemClock _systemClock;
+		protected readonly ISystemClock SystemClock;
 		protected readonly ILogger Logger;
 
 		protected NotificatorBase(IAccountRepository accountRepository, IOperationRepository operationRepository, ILogger logger, ISystemClock systemClock)
@@ -22,7 +22,7 @@ namespace Service.UserTokenAccount.Jobs
 			_accountRepository = accountRepository;
 			_operationRepository = operationRepository;
 			Logger = logger;
-			_systemClock = systemClock;
+			SystemClock = systemClock;
 		}
 
 		protected async ValueTask ProcessMessage(string userId, decimal value, object message)
@@ -40,7 +40,7 @@ namespace Service.UserTokenAccount.Jobs
 				Value = value,
 				UserId = userId,
 				Movement = TokenOperationMovement.Income,
-				Date = _systemClock.Now,
+				Date = SystemClock.Now,
 				Source = TokenOperationSource.TokenPurchase,
 				Info = JsonSerializer.Serialize(message)
 			});

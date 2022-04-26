@@ -10,9 +10,9 @@ namespace Service.UserTokenAccount.Postgres.Services
 	public class OperationRepository : IOperationRepository
 	{
 		private readonly DbContextOptionsBuilder<DatabaseContext> _dbContextOptionsBuilder;
-		private readonly ILogger<UserTokenOperationEntity> _logger;
+		private readonly ILogger<OperationRepository> _logger;
 
-		public OperationRepository(DbContextOptionsBuilder<DatabaseContext> dbContextOptionsBuilder, ILogger<UserTokenOperationEntity> logger)
+		public OperationRepository(DbContextOptionsBuilder<DatabaseContext> dbContextOptionsBuilder, ILogger<OperationRepository> logger)
 		{
 			_dbContextOptionsBuilder = dbContextOptionsBuilder;
 			_logger = logger;
