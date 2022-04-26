@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 using MyJetWallet.Sdk.ServiceBus;
 using MyServiceBus.Abstractions;
 using MyServiceBus.TcpClient;
+using Service.ClientAuditLog.Domain.Models;
 using Service.Core.Client.Services;
-using Service.Registration.Domain.Models;
 using Service.ServerKeyValue.Client;
 using Service.ServiceBus.Models;
 using Service.UserTokenAccount.Jobs;
@@ -27,12 +27,12 @@ namespace Service.UserTokenAccount.Modules
 			builder.RegisterType<TutorialProgressPrcRepository>().AsImplementedInterfaces().SingleInstance();
 
 			builder.RegisterType<SetProgressInfoNotificator>().AutoActivate().SingleInstance();
-			builder.RegisterType<ClientRegisterInfoNotificator>().AutoActivate().SingleInstance();
+			builder.RegisterType<ClientLoginInfoNotificator>().AutoActivate().SingleInstance();
 			builder.RegisterType<UserRewardedNotificator>().AutoActivate().SingleInstance();
 
 			MyServiceBusTcpClient serviceBusClient = builder.RegisterMyServiceBusTcpClient(Program.ReloadedSettings(e => e.ServiceBusReader), Program.LogFactory);
 			builder.RegisterMyServiceBusSubscriberBatch<SetProgressInfoServiceBusModel>(serviceBusClient, SetProgressInfoServiceBusModel.TopicName, QueueName, TopicQueueType.Permanent);
-			builder.RegisterMyServiceBusSubscriberBatch<ClientRegisterMessage>(serviceBusClient, ClientRegisterMessage.TopicName, QueueName, TopicQueueType.Permanent);
+			builder.RegisterMyServiceBusSubscriberBatch<ClientAuditLogModel>(serviceBusClient, ClientAuditLogModel.TopicName, QueueName, TopicQueueType.Permanent);
 			builder.RegisterMyServiceBusSubscriberBatch<UserRewardedServiceBusModel>(serviceBusClient, UserRewardedServiceBusModel.TopicName, QueueName, TopicQueueType.Permanent);
 		}
 	}

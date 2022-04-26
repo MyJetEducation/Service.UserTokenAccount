@@ -26,6 +26,9 @@ namespace Service.UserTokenAccount.Settings
 		[YamlProperty("UserTokenAccount.KeyTutorialProgressPrc")]
 		public string KeyTutorialProgressPrc { get; set; }
 
+		[YamlProperty("UserTokenAccount.KeyFirstLogin")]
+		public string KeyFirstLogin { get; set; }
+
 		[YamlProperty("UserTokenAccount.TokenIncreaseValues")]
 		public TokenIncreaseValues TokenIncreaseValues { get; set; }
 	}
