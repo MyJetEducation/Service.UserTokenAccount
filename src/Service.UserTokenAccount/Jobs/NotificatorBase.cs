@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Service.Core.Client.Services;
 using Service.UserTokenAccount.Domain.Models;
 using Service.UserTokenAccount.Postgres.Models;
 using Service.UserTokenAccount.Postgres.Services;
 using Service.UserTokenAccount.Settings;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Service.UserTokenAccount.Jobs
 {
@@ -42,7 +42,7 @@ namespace Service.UserTokenAccount.Jobs
 				Movement = TokenOperationMovement.Income,
 				Date = _systemClock.Now,
 				Source = TokenOperationSource.TokenPurchase,
-				Info = JsonConvert.SerializeObject(message)
+				Info = JsonSerializer.Serialize(message)
 			});
 
 			if (increased)

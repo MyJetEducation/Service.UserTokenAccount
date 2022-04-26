@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DotNetCoreDecorators;
 using Microsoft.Extensions.Logging;
@@ -44,7 +45,14 @@ namespace Service.UserTokenAccount.Jobs
 
 				string userId = message.UserId;
 
-				TutorialProgressPrcDto prcInfo = await _tutorialProgressPrcRepository.Get(userId, message.Tutorial);
+				List<TutorialProgressPrcDto> dtos = (await _tutorialProgressPrcRepository.Get(userId)).ToList();
+				TutorialProgressPrcDto prcInfo = dtos.FirstOrDefault(dto => dto.Tutorial == message.Tutorial);
+				if (prcInfo == null)
+				{
+					prcInfo = new TutorialProgressPrcDto(){Tutorial = message.Tutorial};
+					dtos.Add(prcInfo);
+				}
+
 				if (prcInfo.SetOkPrc && prcInfo.SetMaxPrc)
 					continue;
 
@@ -65,7 +73,7 @@ namespace Service.UserTokenAccount.Jobs
 				if (value == 0)
 					continue;
 
-				bool flagsSettet = await _tutorialProgressPrcRepository.Save(userId, prcInfo);
+				bool flagsSettet = await _tutorialProgressPrcRepository.Save(userId, dtos.ToArray());
 				if (!flagsSettet)
 					Logger.LogError("Can't save TutorialProgressPrcDto ({dto}) for request: {request}", prcInfo, message);
 

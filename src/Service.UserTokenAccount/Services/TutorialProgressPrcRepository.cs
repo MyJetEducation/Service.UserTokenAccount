@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Service.Core.Client.Models;
-using Service.Education.Structure;
 using Service.Grpc;
 using Service.ServerKeyValue.Grpc;
 using Service.ServerKeyValue.Grpc.Models;
@@ -13,8 +11,8 @@ namespace Service.UserTokenAccount.Services
 {
 	public interface ITutorialProgressPrcRepository
 	{
-		ValueTask<TutorialProgressPrcDto> Get(string userId, EducationTutorial tutorial);
-		ValueTask<bool> Save(string userId, TutorialProgressPrcDto dto);
+		ValueTask<TutorialProgressPrcDto[]> Get(string userId);
+		ValueTask<bool> Save(string userId, TutorialProgressPrcDto[] dtos);
 	}
 
 	public class TutorialProgressPrcRepository : ITutorialProgressPrcRepository
@@ -25,7 +23,7 @@ namespace Service.UserTokenAccount.Services
 
 		public TutorialProgressPrcRepository(IGrpcServiceProxy<IServerKeyValueService> serverKeyValueService) => _serverKeyValueService = serverKeyValueService;
 
-		public async ValueTask<TutorialProgressPrcDto> Get(string userId, EducationTutorial tutorial)
+		public async ValueTask<TutorialProgressPrcDto[]> Get(string userId)
 		{
 			ValueGrpcResponse response = await _serverKeyValueService.Service.GetSingle(new ItemsGetSingleGrpcRequest
 			{
@@ -34,20 +32,13 @@ namespace Service.UserTokenAccount.Services
 			});
 
 			string value = response?.Value;
-			if (value != null)
-			{
-				TutorialProgressPrcDto[] info = JsonSerializer.Deserialize<TutorialProgressPrcDto[]>(value);
+			if (value == null)
+				return Array.Empty<TutorialProgressPrcDto>();
 
-				TutorialProgressPrcDto dto = info?.FirstOrDefault(dto => dto.Tutorial == tutorial);
-
-				if (dto != null)
-					return dto;
-			}
-
-			return new TutorialProgressPrcDto {Tutorial = tutorial};
+			return JsonSerializer.Deserialize<TutorialProgressPrcDto[]>(value) ?? Array.Empty<TutorialProgressPrcDto>();
 		}
 
-		public async ValueTask<bool> Save(string userId, TutorialProgressPrcDto dto)
+		public async ValueTask<bool> Save(string userId, TutorialProgressPrcDto[] dtos)
 		{
 			CommonGrpcResponse commonGrpcResponse = await _serverKeyValueService.TryCall(service => service.Put(new ItemsPutGrpcRequest
 			{
@@ -57,7 +48,7 @@ namespace Service.UserTokenAccount.Services
 					new KeyValueGrpcModel
 					{
 						Key = _tutorialProgressPrcKey.Invoke(),
-						Value = JsonSerializer.Serialize(dto)
+						Value = JsonSerializer.Serialize(dtos)
 					}
 				}
 			}));
