@@ -30,8 +30,11 @@ namespace Service.UserTokenAccount.Jobs
 
 			foreach (UserRewardedServiceBusModel message in events)
 			{
+				Logger.LogDebug("UserRewardedServiceBusModel handled from service bus: {message}", message);
+
 				decimal value = message.Achievements
 					.Select(achievement => GetAchievementIncreaseValue(achievement, settings))
+					.ToArray()
 					.Union(message.Statuses.Select(model => GetStatusIncreaseValue(model.Status, settings)))
 					.Sum();
 
