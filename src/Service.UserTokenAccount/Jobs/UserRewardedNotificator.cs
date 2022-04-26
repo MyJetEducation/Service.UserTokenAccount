@@ -31,8 +31,6 @@ namespace Service.UserTokenAccount.Jobs
 
 			foreach (UserRewardedServiceBusModel message in events)
 			{
-				Logger.LogDebug("UserRewardedServiceBusModel handled from service bus: {@message}", message);
-
 				var values = new List<decimal>();
 
 				UserAchievement[] achievements = message.Achievements;
@@ -43,11 +41,7 @@ namespace Service.UserTokenAccount.Jobs
 				if (!statuses.IsNullOrEmpty())
 					values.AddRange(statuses.Select(model => GetStatusIncreaseValue(model.Status, settings)));
 
-				decimal value = values.Sum();
-				if (value == 0m)
-					continue;
-
-				await ProcessMessage(message.UserId, value, message);
+				await ProcessMessage(message.UserId, values.Sum(), message);
 			}
 		}
 

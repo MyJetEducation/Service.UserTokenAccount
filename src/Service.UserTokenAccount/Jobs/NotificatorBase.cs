@@ -27,7 +27,7 @@ namespace Service.UserTokenAccount.Jobs
 
 		protected async ValueTask ProcessMessage(string userId, decimal value, object message)
 		{
-			Logger.LogInformation("{model} handled from service bus: {user}", typeof (TBusModel), userId);
+			Logger.LogInformation("{model} handled from service bus for user: {user}", typeof (TBusModel), userId);
 
 			if (value == 0m)
 			{
