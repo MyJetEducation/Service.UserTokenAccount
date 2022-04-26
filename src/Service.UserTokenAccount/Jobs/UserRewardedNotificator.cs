@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DotNetCoreDecorators;
 using Microsoft.Extensions.Logging;
 using Service.Core.Client.Constants;
+using Service.Core.Client.Extensions;
 using Service.Core.Client.Services;
 using Service.ServiceBus.Models;
 using Service.UserReward.Domain;
@@ -30,13 +31,21 @@ namespace Service.UserTokenAccount.Jobs
 
 			foreach (UserRewardedServiceBusModel message in events)
 			{
-				Logger.LogDebug("UserRewardedServiceBusModel handled from service bus: {message}", message);
+				Logger.LogDebug("UserRewardedServiceBusModel handled from service bus: {@message}", message);
 
-				decimal value = message.Achievements
-					.Select(achievement => GetAchievementIncreaseValue(achievement, settings))
-					.ToArray()
-					.Union(message.Statuses.Select(model => GetStatusIncreaseValue(model.Status, settings)))
-					.Sum();
+				var values = new List<decimal>();
+
+				UserAchievement[] achievements = message.Achievements;
+				if (!achievements.IsNullOrEmpty())
+					values.AddRange(achievements.Select(achievement => GetAchievementIncreaseValue(achievement, settings)));
+
+				UserStatusGrpcModel[] statuses = message.Statuses;
+				if (!statuses.IsNullOrEmpty())
+					values.AddRange(statuses.Select(model => GetStatusIncreaseValue(model.Status, settings)));
+
+				decimal value = values.Sum();
+				if (value == 0m)
+					continue;
 
 				await ProcessMessage(message.UserId, value, message);
 			}
