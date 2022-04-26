@@ -31,21 +31,22 @@ namespace Service.UserTokenAccount.Jobs
 
 			foreach (UserRewardedServiceBusModel message in events)
 			{
-				var values = new List<decimal>();
+				var values = new List<int>();
+				void AddValues(IEnumerable<int> ints) => values.AddRange(ints.ToArray());
 
 				UserAchievement[] achievements = message.Achievements;
 				if (!achievements.IsNullOrEmpty())
-					values.AddRange(achievements.Select(achievement => GetAchievementIncreaseValue(achievement, settings)));
+					AddValues(achievements.Select(achievement => GetAchievementIncreaseValue(achievement, settings)));
 
 				UserStatusGrpcModel[] statuses = message.Statuses;
 				if (!statuses.IsNullOrEmpty())
-					values.AddRange(statuses.Select(model => GetStatusIncreaseValue(model.Status, settings)));
+					AddValues(statuses.Select(model => GetStatusIncreaseValue(model.Status, settings)));
 
 				await ProcessMessage(message.UserId, values.Sum(), message);
 			}
 		}
 
-		private decimal GetAchievementIncreaseValue(UserAchievement achievement, TokenIncreaseValues settings)
+		private int GetAchievementIncreaseValue(UserAchievement achievement, TokenIncreaseValues settings)
 		{
 			AchievementType achievementType = AchievementTypeHelper.GetAchievementType(achievement);
 
@@ -63,11 +64,11 @@ namespace Service.UserTokenAccount.Jobs
 					return settings.AchievementUnique;
 				default:
 					Logger.LogError("Can't get token increase setting for achievement type: {achievementType}", achievement);
-					return 0m;
+					return 0;
 			}
 		}
 
-		private decimal GetStatusIncreaseValue(UserStatus status, TokenIncreaseValues settings)
+		private int GetStatusIncreaseValue(UserStatus status, TokenIncreaseValues settings)
 		{
 			switch (status)
 			{
@@ -101,7 +102,7 @@ namespace Service.UserTokenAccount.Jobs
 					return settings.StatusRewarded;
 				default:
 					Logger.LogError("Can't get token increase setting for status: {status}", status);
-					return 0m;
+					return 0;
 			}
 		}
 	}

@@ -33,72 +33,72 @@ namespace Service.UserTokenAccount.Settings
 	public class TokenIncreaseValues
 	{
 		[YamlProperty("Register")]
-		public decimal Register { get; set; }
+		public int Register { get; set; }
 
 		[YamlProperty("Daily")]
-		public decimal Daily { get; set; }
+		public int Daily { get; set; }
 
 		[YamlProperty("TutorialFinished80")]
-		public decimal TutorialFinished80 { get; set; }
+		public int TutorialFinished80 { get; set; }
 
 		[YamlProperty("TutorialFinished100")]
-		public decimal TutorialFinished100 { get; set; }
+		public int TutorialFinished100 { get; set; }
 
 		[YamlProperty("AchievementStandard")]
-		public decimal AchievementStandard { get; set; }
+		public int AchievementStandard { get; set; }
 
 		[YamlProperty("AchievementRare")]
-		public decimal AchievementRare { get; set; }
+		public int AchievementRare { get; set; }
 
 		[YamlProperty("AchievementSuperRare")]
-		public decimal AchievementSuperRare { get; set; }
+		public int AchievementSuperRare { get; set; }
 
 		[YamlProperty("AchievementUltraRare")]
-		public decimal AchievementUltraRare { get; set; }
+		public int AchievementUltraRare { get; set; }
 
 		[YamlProperty("AchievementUnique")]
-		public decimal AchievementUnique { get; set; }
+		public int AchievementUnique { get; set; }
 
 		[YamlProperty("StatusMasterOfOpenness")]
-		public decimal StatusMasterOfOpenness { get; set; }
+		public int StatusMasterOfOpenness { get; set; }
 
 		[YamlProperty("StatusNewbie")]
-		public decimal StatusNewbie { get; set; }
+		public int StatusNewbie { get; set; }
 
 		[YamlProperty("StatusSecondYearStudent")]
-		public decimal StatusSecondYearStudent { get; set; }
+		public int StatusSecondYearStudent { get; set; }
 
 		[YamlProperty("StatusBachelor")]
-		public decimal StatusBachelor { get; set; }
+		public int StatusBachelor { get; set; }
 
 		[YamlProperty("StatusMagister")]
-		public decimal StatusMagister { get; set; }
+		public int StatusMagister { get; set; }
 
 		[YamlProperty("StatusAnalyst")]
-		public decimal StatusAnalyst { get; set; }
+		public int StatusAnalyst { get; set; }
 
 		[YamlProperty("StatusStrategist")]
-		public decimal StatusStrategist { get; set; }
+		public int StatusStrategist { get; set; }
 
 		[YamlProperty("StatusFinancier")]
-		public decimal StatusFinancier { get; set; }
+		public int StatusFinancier { get; set; }
 
 		[YamlProperty("StatusInvestor")]
-		public decimal StatusInvestor { get; set; }
+		public int StatusInvestor { get; set; }
 
 		[YamlProperty("StatusBestFriend")]
-		public decimal StatusBestFriend { get; set; }
+		public int StatusBestFriend { get; set; }
 
 		[YamlProperty("StatusLongLiver")]
-		public decimal StatusLongLiver { get; set; }
+		public int StatusLongLiver { get; set; }
 
 		[YamlProperty("StatusExpert")]
-		public decimal StatusExpert { get; set; }
+		public int StatusExpert { get; set; }
 
 		[YamlProperty("StatusRewarded")]
-		public decimal StatusRewarded { get; set; }
+		public int StatusRewarded { get; set; }
 
 		[YamlProperty("StatusKeyMaster")]
-		public decimal StatusKeyMaster { get; set; }
+		public int StatusKeyMaster { get; set; }
 	}
 }

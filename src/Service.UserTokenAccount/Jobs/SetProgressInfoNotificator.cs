@@ -48,7 +48,7 @@ namespace Service.UserTokenAccount.Jobs
 				if (prcInfo.SetOkPrc && prcInfo.SetMaxPrc)
 					continue;
 
-				var value = 0m;
+				int value = 0;
 
 				if (tutorialProgress.IsMaxProgress() && !prcInfo.SetMaxPrc)
 				{
@@ -62,7 +62,7 @@ namespace Service.UserTokenAccount.Jobs
 					prcInfo.SetOkPrc = true;
 				}
 
-				if (value == 0m)
+				if (value == 0)
 					continue;
 
 				bool flagsSettet = await _tutorialProgressPrcRepository.Save(userId, prcInfo);

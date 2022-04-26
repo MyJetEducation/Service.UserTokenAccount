@@ -22,7 +22,7 @@ namespace Service.UserTokenAccount.Jobs
 
 		private async ValueTask HandleEvent(IReadOnlyList<ClientRegisterMessage> events)
 		{
-			decimal value = GetSettings().Invoke().Register;
+			int value = GetSettings().Invoke().Register;
 
 			foreach (ClientRegisterMessage message in events)
 				await ProcessMessage(message.TraderId, value, message);
